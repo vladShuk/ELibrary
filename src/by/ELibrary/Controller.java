@@ -139,7 +139,7 @@ public class Controller extends HttpServlet {
 		if (request.getParameter("action") != "loadContent") {
 			Part part = request.getPart("content");
 			boolean bln1, bln2;
-			bln1 = part.getSize() < 200000000 && (part.getContentType().contains("pdf") || part.getContentType().contains("txt") || part.getContentType().contains("html") || part.getContentType().contains("fb2") || part.getContentType().contains("djvu"));
+			bln1 = part.getSize() < 20000000 && (part.getContentType().contains("pdf") || part.getContentType().contains("txt") || part.getContentType().contains("html") || part.getContentType().contains("fb2") || part.getContentType().contains("djvu"));
 			bln2 = Pattern.matches("[a-z,A-Z,а-я,А-Я,0-9, ]{1,45}", request.getParameter("name")) && Pattern.matches("[a-z,A-Z,а-я,А-Я,0-9, ]{1,45}", request.getParameter("author")) && Pattern.matches("[0-9]{1,4}", request.getParameter("year")) && request.getParameter("description").length() < 256;
 			if (bln1 && bln2) {
 				try {
