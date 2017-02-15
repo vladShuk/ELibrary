@@ -1,11 +1,13 @@
 package by.ELibrary;
 
+// Сущность "книга"
 public class Book {
 	private int id;
 	private String name;
 	private String author;
 	private int year;
 	private String description;
+	// Путь к архиву для скачивания
 	private String content;
 	
 	public Book(int id, String name, String author, int year, String description, String content) {
