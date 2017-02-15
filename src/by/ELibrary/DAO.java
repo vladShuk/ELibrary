@@ -11,8 +11,9 @@ import java.util.List;
 public class DAO {
 	private static final String path = "jdbc:mysql://localhost:3306/ELibrary";
 	private static final String pathLogin = "root";
-	private static final String pathPassword = "1091";
+	private static final String pathPassword = "password";
 
+	// При добавлении новой книги явно указываются название, автор, год издания и описание. Путь к файлу указывается в следующем методе
 	static int addBook(String name, String author, int year, String description) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection cn = DriverManager.getConnection(path, pathLogin, pathPassword);
@@ -27,6 +28,7 @@ public class DAO {
 		return count;
 	}
 	
+	// Запись пути к архиву для скачивания
 	static void setContent(int id, String content) throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection cn = DriverManager.getConnection(path, pathLogin, pathPassword);
@@ -35,6 +37,7 @@ public class DAO {
 		cn.close();
 	}
 	
+	// Получение сущности "книга"
 	static Book getBook(int id) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection cn = DriverManager.getConnection(path, pathLogin, pathPassword);
@@ -56,6 +59,7 @@ public class DAO {
 		return book;
 	}
 	
+	// Получение списка последних 5 добавленных книг
 	static List<Book> listBooks() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection cn = DriverManager.getConnection(path, pathLogin, pathPassword);
@@ -77,6 +81,7 @@ public class DAO {
 		return list;
 	}
 	
+	// Получение определенной страницы списка книг
 	static List<Book> listBooks(int page) throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection cn = DriverManager.getConnection(path, pathLogin, pathPassword);
