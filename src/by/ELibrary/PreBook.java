@@ -1,5 +1,6 @@
 package by.ELibrary;
 
+// Сущность для предварительного просмотра книги. Отличается от Book.class отсутствием ссылки к пути
 public class PreBook {
 	private String name;
 	private String author;
