@@ -24,12 +24,16 @@ import javax.servlet.http.Part;
 @WebServlet("/controller")
 @MultipartConfig
 public class Controller extends HttpServlet {
+	// Кэш недавно просмотренных книг
 	static Map<Integer, Book> booksCash = new HashMap< Integer, Book>();
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Запрос страницы web-приложения
 		if (request.getParameter("page") != null) {
 			switch (request.getParameter("page")) {
 			case "list":
+				// Получение списка книг
 				try {
+					// Получение определенной страницы книг
 					if (request.getParameter("listPage") != null && !request.getParameter("listPage").equals("")) {
 						request.setAttribute("list", DAO.listBooks(Integer.parseInt(request.getParameter("listPage"))));
 						request.setAttribute("listPage", request.getParameter("listPage"));
@@ -43,10 +47,12 @@ public class Controller extends HttpServlet {
 									Integer.parseInt(request.getParameter("listPage")) + 1);
 						else
 							request.setAttribute("nextListPage", Integer.parseInt(request.getParameter("listPage")));
+					// Получение списка книг для поиска
 					} else if (request.getParameter("search") != null) {
 						request.setAttribute("prevListPage", 1);
 						request.setAttribute("nextListPage", 1);
 						request.setAttribute("list", DAO.searchBooks(request.getParameter("search")));
+					// Первая страница книг
 					} else {
 						request.setAttribute("prevListPage", 1);
 						if (DAO.countOfPages() > 1)
@@ -60,9 +66,12 @@ public class Controller extends HttpServlet {
 				}
 				break;
 			case "book":
+				// Просмотр книги
 				try {
+					// При наличии книги в кэша - получение ее из оного
 					if (booksCash.containsKey(Integer.parseInt(request.getParameter("booksId")))) {
 						request.setAttribute("book", booksCash.get(Integer.parseInt(request.getParameter("booksId"))));
+					// Иначе получение из БД
 					} else {
 						Book book = DAO.getBook(Integer.parseInt(request.getParameter("booksId")));
 						booksCash.put(book.getId(), book);
@@ -77,6 +86,7 @@ public class Controller extends HttpServlet {
 				}
 				break;
 			case "editBook":
+				// Страница редактирования книги
 				try {
 					request.setAttribute("book", DAO.getBook(Integer.parseInt(request.getParameter("booksId"))));
 				} catch (ClassNotFoundException | SQLException e) {
@@ -91,6 +101,7 @@ public class Controller extends HttpServlet {
 		} else if (request.getParameter("ajax") != null) {
 			switch (request.getParameter("ajax")) {
 			case "validate":
+				// Валидация данных при добавлении/редактировании книги посредством ajax
 				if (request.getParameter("name") != null) {
 					PrintWriter out = response.getWriter();
 					out.print(Pattern.matches("[a-z,A-Z,а-я,А-Я,0-9, ]{1,45}", request.getParameter("name")));
@@ -107,12 +118,14 @@ public class Controller extends HttpServlet {
 				break;
 				
 			case "check":
+				// Комплексная проверка вводимых данных книги
 				PrintWriter out = response.getWriter();
 				out.print(Pattern.matches("[a-z,A-Z,а-я,А-Я,0-9, ]{1,45}", request.getParameter("name")) && Pattern.matches("[a-z,A-Z,а-я,А-Я,0-9, ]{1,45}", request.getParameter("author")) && Pattern.matches("[0-9]{1,4}", request.getParameter("year")) && request.getParameter("description").length() < 256);
 				out.flush();
 				break;
 
 			case "editBook":
+				// Изменение книги
 				try {
 					DAO.editBook(Integer.parseInt(request.getParameter("id")), request.getParameter("name"), request.getParameter("author"), Integer.parseInt(request.getParameter("year")), request.getParameter("description"));
 				} catch (NumberFormatException | ClassNotFoundException | SQLException e) {
